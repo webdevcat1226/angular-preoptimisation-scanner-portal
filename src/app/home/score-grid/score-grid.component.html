@@ -1,0 +1,440 @@
+<div style="font-weight: bold !important;font-size:12px !important;" class="resolution-width-table">
+  <table id="example" matSort (matSortChange)="sortData($event)" *ngIf="!hide"
+         [ngClass]="isLight() ? 'table table-hover responsive nowrap' : 'table table-dark table-hover responsive nowrap'"
+         style="width:100% !important">
+    <thead>
+    <tr [style.background-color]="color" [ngClass]="isLight() ? 'table-header' : 'table-dark-header'">
+      <th colspan="23" [style.background-color]="color" [ngClass]="isLight() ? 'table-header' : 'table-dark-header'">
+        <div class="row" left style="font-size:15px !important;height:30px !important;margin-left:2px !important;">
+          <div *ngIf="!gridNameEdit" class="col-md-4" style="font-size:15px !important;">
+            <span (click)="gridToggle()">{{grid.name}}</span>
+          </div>
+          <div *ngIf="gridNameEdit" class="col-md-4" style="font-size:15px !important;">
+            <input type="text" [(ngModel)]="gridName" style="background: transparent;-moz-border-radius: 15px;
+                  border-radius: 15px;border:none;" [ngClass]="isLight()?'light-editable-text':'dark-editable-text'">
+            &nbsp;<i class="fa fa-check" [ngClass]="isLight()?'light-editable':'dark-editable'" style="font-size: 17px;"
+                     (click)="saveEditable()"></i> &nbsp;
+            <i class="fa fa-times" [ngClass]="isLight()?'light-editable':'dark-editable'" style="font-size: 17px;"
+               (click)="cancelEditable()"></i>
+
+          </div>
+          <div class="col-md-3"></div>
+          <div class="col-md-5">
+                  <span class="pull-right right-10" style="cursor: pointer;    margin-top: 3px !important;"
+                        (click)="open(settings)">
+                      <i class="fa fa-cog " style="font-size: 18px !important;"></i>
+                  </span>
+            <span class="pull-right right-5 bottom-0 margin-top-4" style="font-size: 16px;cursor: pointer;"
+                  (click)="open(statsFilters)">
+                      <i class="fa fa-futbol-o" style="font-size:17px !important"></i>
+                      Stats Filter
+                  </span>
+            <span class="pull-right right-10 bottom-0" style="font-size: 16px;cursor: pointer;"
+                  (click)="open(quickFilters)">
+                      <i class="fa fa-clock-o" style="font-size: 17px !important;"></i>
+                      Quick Filters
+                  </span>
+            <span class="pull-right right-10 bottom-0" style="font-size: 16px;cursor: pointer;"
+                  (click)="open(strategyPopup)">
+                    <i class="fa fa-clock-o" style="font-size: 17px !important;"></i>
+                      Strategy
+                  </span>
+
+          </div>
+        </div>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngIf="sortedData.length" [ngClass]="isLight() ? 'border-bottom' : 'border-bottom-dark dark-background'">
+      <td colspan="13" style="border-right:solid 1px rgb(188, 189, 187) !important"
+          [ngClass]="isLight() ? '' : 'dark-background'">
+        <div class="row">
+          <div [ngClass]="isLight() ? 'col-md-5 grey-text' : 'col-md-5 white-text'">Match Info</div>
+        </div>
+      </td>
+      <td colspan="8" [ngClass]="isLight() ? '' : 'dark-background'">
+        <div class="row">
+          <div [ngClass]="isLight() ? 'col-md-4 grey-text' : 'col-md-4 white-text'">
+            <span style="font-size: 13px !important;"> Previous Stats</span>
+          </div>
+          <div [ngClass]="isLight() ? 'col-md-6 grey-text' : 'col-md-6 white-text'">
+            <!-- <select style="margin-left:-20px !important;" [(ngModel)]="lastTimeSelection"  [ngClass]="isLight() ? 'form-control round-style-select' : 'form-control round-style-dark-select'">
+              <option value={{opt.name}} *ngFor="let opt of options;">{{opt.value}}</option>
+            </select> -->
+            <div ngbDropdown style="width:100%">
+              <div class="btn-group" style="width:100%">
+                <button style="height: 28px !important;"
+                        [ngClass]="isLight() ? 'btn btn-pair btn-soccer-outline-primary-left' :'btn btn-pair btn-soccer-dark-outline-primary-left'"
+                        id="dropdownBasic2" ngbDropdownToggle>
+                              <span style="font-size: 14px !important;">
+                                  {{lastTimeSelection.value}}
+                              </span>
+
+                </button>
+                <button ngbDropdownToggle id="dropdownBasic2" type="button"
+                        style="font-size: 15px !important;width:30px !important;height:28px !important;"
+                        [ngClass]="isLight() ? 'btn btn-pair btn-soccer-primary-2-right': 'btn btn-pair btn-soccer-dark-primary-right'">
+                  <i class="fa fa-caret-down fa-lg" style="color: #fff !important;margin-bottom:4px !important"></i>
+                </button>
+              </div>
+
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic2" style="width:calc(100% - 40px) !important;"
+                   [ngClass]="isLight()? 'dropdown-body':'dropdown-body-dark'">
+                <button (click)="selectDropdownValue(opt)" *ngFor="let opt of options;" ngbDropdownItem>
+                  {{opt.value}}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2">
+
+          </div>
+        </div>
+      </td>
+      <td colspan="2" [ngClass]="isLight() ? '' : 'dark-background'">
+
+      </td>
+    </tr>
+    <tr *ngIf="sortedData.length" [ngClass]="isLight() ? 'border-bottom' : 'border-bottom-dark dark-background'">
+
+      <td *ngIf="isVisible('main','gameTime')" mat-sort-header="gameTime"
+          [ngClass]="isLight() ? 'center-align' : 'center-align-dark dark-background'">
+        <i style="font-size: 15px !important;margin-left:2px !important;"
+           [ngClass]="isLight() ? 'fa fa-clock-o fa-lg grey-text-icon' :' fa fa-clock-o white-text'"></i>
+      </td>
+      <td *ngIf="isVisible('main','score')" mat-sort-header="totalGoals"
+          [ngClass]="isLight() ? 'center-align' : 'center-aligned-dark dark-background'">
+        <i style="font-size: 15px !important;"
+           [ngClass]="isLight() ? 'fa fa-futbol-o fa-lg grey-text-icon' :' fa fa-futbol-o  fa-lg white-text'"></i>
+      </td>
+      <td *ngIf="isVisible('main','search')" style="min-width: 34% !important;max-width: 34% !important;"
+          [ngClass]="isLight() ? 'center-align grey-text' : ' white-text center-align-dark dark-background'">
+        <input *ngIf="isVisible('main','searchField')" type="text" placeholder="&#xF002;" [(ngModel)]="searchValue"
+               [ngClass]="isLight() ? 'form-control round-style empty' : 'form-control round-style-dark empty-dark'"
+               id="inputSuccess2"/>
+
+      </td>
+      <td *ngIf="isVisible('main','shotsOnTarget')" mat-sort-header="totalOnTarget"
+          [ngClass]="isLight() ? 'center-aligned' : 'center-align-dark dark-background'" style="width:1.2% !important">
+        <img *ngIf="isLight()" src="../../../assets/green-round.png" style="width:17px !important">
+        <img *ngIf="!isLight()" src="../../../assets/green-round-dark.png" style="width:17px !important">
+
+      </td>
+      <td *ngIf="isVisible('main','shotsOffTarget')" mat-sort-header="totalOffTarget"
+          [ngClass]="isLight() ? 'center-aligned' : 'center-align-dark dark-background'" style="width:1.2% !important">
+        <img *ngIf="isLight()" src="../../../assets/red-round.png" style="width:17px !important">
+        <img *ngIf="!isLight()" src="../../../assets/red-round-dark.png" style="width:17px !important">
+
+
+      </td>
+      <td *ngIf="isVisible('main','attacks')" mat-sort-header="totalAttacks"
+          [ngClass]="isLight() ? 'center-aligned' : 'center-align-dark dark-background'" style="width:1.2% !important">
+        <img *ngIf="isLight()" src="../../../assets/green-exchange.png" style="width:17px !important">
+        <img *ngIf="!isLight()" src="../../../assets/green-exchange-dark.png" style="width:17px !important">
+
+      </td>
+      <td *ngIf="isVisible('main','dangerousAttacks')" mat-sort-header="totalDangerousAttacks"
+          [ngClass]="isLight() ? 'center-aligned' : 'center-align-dark dark-background'" style="width:1.2% !important">
+        <img *ngIf="isLight()" src="../../../assets/red-exchange.png" style="width:17px !important">
+        <img *ngIf="!isLight()" src="../../../assets/red-exchange-dark.png" style="width:17px !important">
+      </td>
+      <td *ngIf="isVisible('main','corners')" mat-sort-header="totalCorners"
+          [ngClass]="isLight() ? 'center-aligned' : 'center-align-dark dark-background'" style="width:1.2% !important">
+        <img *ngIf="isLight()" src="../../../assets/corner.png" style="width:17px !important">
+        <img *ngIf="!isLight()" src="../../../assets/corner-dark.png" style="width:17px !important">
+      </td>
+      <!-- mat-sort-header="totalPossession" -->
+      <td *ngIf="isVisible('main','possessions')"
+          [ngClass]="isLight() ? 'center-aligned' : 'center-align-dark dark-background'">
+        <img *ngIf="isLight()" src="../../../assets/pitch.png" style="width:17px !important">
+        <img *ngIf="!isLight()" src="../../../assets/pitch-dark.png" style="width:17px !important">
+      </td>
+      <td *ngIf="isVisible('main','yellowCards')" mat-sort-header="totalYellowCards"
+          [ngClass]="isLight() ? 'center-align' : 'center-aligned-dark dark-background'" style="width:1.2% !important">
+        <img *ngIf="isLight()" src="../../../assets/yellow-card.png" style="width:17px !important">
+        <img *ngIf="!isLight()" src="../../../assets/yellow-card-dark.png" style="width:17px !important">
+      </td>
+      <td *ngIf="isVisible('main','redCards')" mat-sort-header="totalRedCards"
+          [ngClass]="isLight() ? 'center-align' : 'center-aligned-dark dark-background'" style="width:1.2% !important">
+        <img *ngIf="isLight()" src="../../../assets/red-card.png" style="width:17px !important">
+        <img *ngIf="!isLight()" src="../../../assets/red-card-dark.png" style="width:17px !important">
+      </td>
+      <td *ngIf="isVisible('main','ap1Graph')"
+          [ngClass]="isLight() ? 'center-aligned' : 'center-align-dark dark-background'" style="width:1.2% !important">
+        <img *ngIf="isLight()" src="../../../assets/graph1.png" style="width:17px !important">
+        <img *ngIf="!isLight()" src="../../../assets/graph1-dark.png" style="width:17px !important">
+
+      </td>
+      <td *ngIf="isVisible('main','ap2Graph')"
+          [ngClass]="isLight() ? 'center-aligned' : 'center-align-dark dark-background'"
+          style="border-right:solid 1px rgb(215, 218, 212) !important;width:1.2% !important">
+        <img *ngIf="isLight()" src="../../../assets/graph2.png" style="width:17px !important">
+        <img *ngIf="!isLight()" src="../../../assets/graph2-dark.png" style="width:17px !important">
+      </td>
+      <td *ngIf="isVisible('previous','shotsOnTarget')"
+          [ngClass]="isLight() ? 'center-align' : 'center-align-dark dark-background'" style="width:1.2% !important">
+        <img *ngIf="isLight()" src="../../../assets/green-round.png" style="width:17px !important">
+        <img *ngIf="!isLight()" src="../../../assets/green-round-dark.png" style="width:17px !important">
+      </td>
+      <td *ngIf="isVisible('previous','shotsOffTarget')"
+          [ngClass]="isLight() ? 'center-align' : 'center-align-dark dark-background'" style="width:1.2% !important">
+        <img *ngIf="isLight()" src="../../../assets/red-round.png" style="width:17px !important">
+        <img *ngIf="!isLight()" src="../../../assets/red-round-dark.png" style="width:17px !important">
+      </td>
+      <td *ngIf="isVisible('previous','attacks')"
+          [ngClass]="isLight() ? 'center-align' : 'center-align-dark dark-background'" style="width:1.2% !important">
+        <img *ngIf="isLight()" src="../../../assets/green-exchange.png" style="width:17px !important">
+        <img *ngIf="!isLight()" src="../../../assets/green-exchange-dark.png" style="width:17px !important">
+      </td>
+      <td *ngIf="isVisible('previous','dangerousAttacks')"
+          [ngClass]="isLight() ? 'center-align' : 'center-align-dark dark-background'" style="width:1.2% !important">
+        <img *ngIf="isLight()" src="../../../assets/red-exchange.png" style="width:17px !important">
+        <img *ngIf="!isLight()" src="../../../assets/red-exchange-dark.png" style="width:17px !important">
+      </td>
+      <td *ngIf="isVisible('previous','corners')"
+          [ngClass]="isLight() ? 'center-align' : 'center-align-dark dark-background'" style="width:1.2% !important">
+        <img *ngIf="isLight()" src="../../../assets/corner.png" style="width:17px !important">
+        <img *ngIf="!isLight()" src="../../../assets/corner-dark.png" style="width:17px !important">
+      </td>
+      <td *ngIf="isVisible('previous','goals')"
+          [ngClass]="isLight() ? 'center-align' : 'center-align-dark dark-background'" style="width:1.2% !important">
+        <i style="font-size: 14px !important;"
+           [ngClass]="isLight() ? 'fa fa-futbol-o fa-lg grey-text-icon' :' fa fa-futbol-o white-text'"></i>
+      </td>
+      <td *ngIf="isVisible('previous','intensity')"
+          [ngClass]="isLight() ? 'center-align' : 'center-align-dark dark-background'" style="width:1.2% !important">
+        <img *ngIf="isLight()" src="../../../assets/power.png" style="width:17px !important">
+        <img *ngIf="!isLight()" src="../../../assets/power-dark.png" style="width:17px !important">
+      </td>
+      <td *ngIf="isVisible('misc','momentum')" style="min-width:6% !important;font-size:13px !important"
+          [ngClass]="isLight() ? 'grey-text center-aligned' : 'white-text center-align-dark dark-background'">
+        <img *ngIf="isLight()" src="../../../assets/graph-info.png" style="width:17px !important">
+        <img *ngIf="!isLight()" src="../../../assets/graph-info-dark.png" style="width:17px !important">
+
+        Momentum
+
+      </td>
+      <td *ngIf="isVisible('misc','alert')" mat-sort-header="bell"
+          [ngClass]="isLight() ? 'center-aligned' : 'center-align-dark dark-background'" style="width:1.5% !important;">
+        <i [ngClass]="isLight() ? 'fa fa-bell-o fa-lg grey-text-icon' : 'fa fa-bell-o fa-lg white-text'"></i>
+      </td>
+      <td *ngIf="isVisible('misc','delete')"
+          [ngClass]="isLight() ? 'center-aligned' : 'center-align-dark dark-background'" style="width:1.5% !important;">
+        <i [ngClass]="isLight() ? 'fa fa-trash fa-lg grey-text-icon' :' fa fa-trash fa-lg white-text'"></i>
+      </td>
+    </tr>
+
+
+    <tr [ngClass]="i==(matches?.length-1) ? 'border-bottom grey-text last' : 'border-bottom-dark white-text'"
+        *ngFor="let match of sortedData | search:searchValue;let i=index;">
+      <td *ngIf="isVisible('main','gameTime')"
+          [ngClass]="isLight() ? 'center-aligned grey-text' : 'white-text dark-background'">
+        {{match.gameTime}}
+      </td>
+      <td *ngIf="isVisible('main','score')"
+          [ngClass]="isLight() ? 'center-align center-aligned' : 'center-align-dark dark-background'">
+        {{match.score}}
+      </td>
+      <td *ngIf="isVisible('main','search')" [ngClass]="isLight() ? 'grey-text' : 'white-text dark-background'">
+        <img *ngIf="match.homeImage && match.homeImage.imageUrl"
+             src="{{match.homeImage.imageUrl}}" style="width:25px !important"/>
+        {{match.homeName}}
+        <span *ngIf="match.homePosition">({{match.homePosition}})</span>
+        <img *ngIf="isLight()" [ngbPopover]="homeformPopover" src="../../../assets/info.png"
+             style="width:15px !important">
+        <img *ngIf="!isLight()" [ngbPopover]="homeformPopover" src="../../../assets/info-dark.png"
+             style="width:15px !important">
+        <br/>
+        <img *ngIf="match.awayImage && match.awayImage.imageUrl" src="{{match.awayImage.imageUrl}}"
+             style="width:25px !important"/>
+        {{match.awayName}}
+        <span *ngIf="match.awayPosition">({{match.awayPosition}})</span>
+        <img *ngIf="isLight()" [ngbPopover]="awayformPopover" src="../../../assets/info.png"
+             style="width:15px !important">
+        <img *ngIf="!isLight()" [ngbPopover]="awayformPopover" src="../../../assets/info-dark.png"
+             style="width:15px !important">
+        <ng-template #homeformPopover>
+          <app-historical-stats-pop-over [dataOptions]="match.homeForm" [preMatchOdds]="match.preMatchOdds"
+                                         [homeId]="match.homeId" [type]="'Home'"
+                                         [league]="match.league">
+          </app-historical-stats-pop-over>
+        </ng-template>
+        <ng-template #awayformPopover>
+          <app-historical-stats-pop-over [dataOptions]="match.awayForm" [homeId]="match.awayId"
+                                         [preMatchOdds]="match.preMatchOdds" [type]="'Away'" [league]="match.league">
+          </app-historical-stats-pop-over>
+        </ng-template>
+      </td>
+      <td *ngIf="isVisible('main','shotsOnTarget')"
+          [ngClass]="isLight() ? 'center-aligned' : 'center-align-dark dark-background'">
+        <span style="margin-left:2px !important">{{match.statistics.totalHomeOnTarget}}</span><br/>
+        <span style="margin-left:2px !important">{{match.statistics.totalAwayOnTarget}}</span>
+      </td>
+      <td *ngIf="isVisible('main','shotsOffTarget')"
+          [ngClass]="isLight() ? 'center-aligned' : 'center-align-dark dark-background'">
+        <span style="margin-left:2px !important">{{match.statistics.totalHomeOffTarget}}</span><br/>
+        <span style="margin-left:2px !important"> {{match.statistics.totalAwayOffTarget}}</span>
+      </td>
+      <td *ngIf="isVisible('main','attacks')"
+          [ngClass]="isLight() ? 'center-aligned' : 'center-align-dark dark-background'">
+        {{match.statistics.totalHomeAttacks}}<br/>
+        {{match.statistics.totalAwayAttacks}}
+      </td>
+      <td *ngIf="isVisible('main','dangerousAttacks')"
+          [ngClass]="isLight() ? 'center-aligned' : 'center-align-dark dark-background'">
+        {{match.statistics.totalHomeDangerousAttacks}}<br/>
+        {{match.statistics.totalAwayDangerousAttacks}}
+      </td>
+      <td *ngIf="isVisible('main','corners')"
+          [ngClass]="isLight() ? 'center-aligned' : 'center-align-dark dark-background'">
+        {{match.statistics.totalHomeCorners}}<br/>
+        {{match.statistics.totalAwayCorners}}
+      </td>
+      <td *ngIf="isVisible('main','possessions')"
+          [ngClass]="isLight() ? 'center-aligned' : 'center-align-dark dark-background'" style="text-align: center;">
+        {{match.statistics.totalHomePossession}}<br/>
+        {{match.statistics.totalAwayPossession}}
+      </td>
+      <td *ngIf="isVisible('main','yellowCards')"
+          [ngClass]="isLight() ? 'grey-text center-aligned' : 'white-text center-align-dark dark-background'"
+          style="text-align: center;">
+        <span style="margin-left:4px !important">{{match.statistics.totalHomeYellowCards}}</span><br/>
+        <span style="margin-left:4px !important">{{match.statistics.totalAwayYellowCards}}</span>
+      </td>
+      <td *ngIf="isVisible('main','redCards')"
+          [ngClass]="isLight() ? 'center-aligned' : 'center-align-dark dark-background'"
+          style="text-align: center;margin-left:10px !important;">
+        <span style="margin-left:4px !important"> {{match.statistics.totalHomeRedCards}}</span><br/>
+        <span style="margin-left:4px !important">{{match.statistics.totalAwayRedCards}}</span>
+      </td>
+      <td *ngIf="isVisible('main','ap1Graph')"
+          [ngClass]="isLight() ? 'center-aligned' : 'center-align-dark dark-background'">
+          <span style="cursor: pointer;" [ngbPopover]="popContent1" placement="bottom">
+            {{!(match.graphicalData1 | average:'home').constructor.isNaN(match.graphicalData1 | average:'home') ? (match.graphicalData1 | average:'home') : '0'}}</span><br/>
+        <span style="cursor: pointer;" [ngbPopover]="popContent1" placement="bottom">
+              {{!(match.graphicalData1| average:'home').constructor.isNaN(match.graphicalData1 | average:'away') ? (match.graphicalData1 | average:'away') : '0'}}
+            </span>
+        <ng-template #popContent1>
+          <app-momentum-spline-chart [dataOptions]="match.graphicalData1" [labels]="match.splineGraphLabel">
+
+          </app-momentum-spline-chart>
+        </ng-template>
+      </td>
+      <td *ngIf="isVisible('main','ap2Graph')" style="border-right:solid 1px rgb(215, 218, 212) !important"
+          [ngClass]="isLight() ? 'center-aligned' : 'center-align-dark dark-background'">
+          <span style="cursor: pointer;" [ngbPopover]="popContent4" placement="bottom">
+          {{!(match.graphicalData2 | average:'home').constructor.isNaN(match.graphicalData2 | average:'home') ? (match.graphicalData2 | average:'home') : '0'}}</span><br/>
+        <span style="cursor: pointer;" [ngbPopover]="popContent4" placement="bottom">
+            {{!(match.graphicalData2 | average:'home').constructor.isNaN(match.graphicalData2 | average:'home') ? (match.graphicalData2 | average:'home') : '0'}}</span>
+        <ng-template #popContent4>
+          <app-momentum-spline-chart [dataOptions]="match.graphicalData2" [labels]="match.splineGraphLabel">
+
+          </app-momentum-spline-chart>
+        </ng-template>
+      </td>
+      <td *ngIf="isVisible('previous','shotsOnTarget')"
+          [ngClass]="isLight() ? 'center-align' : 'center-aligned-dark dark-background'">
+        {{match['home' + lastTimeSelection.name]?.shotsOnTarget}}<br/>
+        {{match['away' + lastTimeSelection.name]?.shotsOnTarget}}
+      </td>
+      <td *ngIf="isVisible('previous','shotsOffTarget')"
+          [ngClass]="isLight() ? 'center-align' : 'center-aligned-dark dark-background'">
+        {{match['home' + lastTimeSelection.name]?.shotsOffTarget}}<br/>
+        {{match['away' + lastTimeSelection.name]?.shotsOffTarget}}
+      </td>
+      <td *ngIf="isVisible('previous','attacks')"
+          [ngClass]="isLight() ? 'center-align' : 'center-aligned-dark dark-background'">
+        {{match['home' + lastTimeSelection.name]?.attacks}}<br/>
+        {{match['away' + lastTimeSelection.name]?.attacks}}
+      </td>
+      <td *ngIf="isVisible('previous','dangerousAttacks')"
+          [ngClass]="isLight() ? 'center-align' : 'center-aligned-dark dark-background'">
+        {{match['home' + lastTimeSelection.name]?.dangerousAttacks}}<br/>
+        {{match['away' + lastTimeSelection.name]?.dangerousAttacks}}
+      </td>
+      <td *ngIf="isVisible('previous','corners')"
+          [ngClass]="isLight() ? 'center-align' : 'center-aligned-dark dark-background'">
+        {{match['home' + lastTimeSelection.name]?.corners}}<br/>
+        {{match['away' + lastTimeSelection.name]?.corners}}
+      </td>
+      <td *ngIf="isVisible('previous','goals')"
+          [ngClass]="isLight() ? 'center-align' : 'center-aligned-dark dark-background'">
+        {{match['home' + lastTimeSelection.name]?.goals}}<br/>
+        {{match['away' + lastTimeSelection.name]?.goals}}
+      </td>
+      <td *ngIf="isVisible('previous','intensity')"
+          [ngClass]="isLight() ? 'center-align' : 'center-aligned-dark dark-background'">
+        {{match['home' + lastTimeSelection.name]?.pressureIndex}}<br/>
+        {{match['away' + lastTimeSelection.name]?.pressureIndex}}
+      </td>
+      <td *ngIf="isVisible('misc','momentum')" style="width:5% !important;"
+          [ngClass]="isLight() ? 'grey-text' : 'white-text dark-background'">
+        <app-momentum-graph [dataOptions]="match.barGraphData"></app-momentum-graph>
+      </td>
+      <td *ngIf="isVisible('misc','alert')" [ngClass]="isLight() ? 'grey-text' : 'white-text dark-background'">
+        <i class="fa fa-bell-o fa-lg" *ngIf="!match.bell" (click)="selectBell(match)"
+           style="color:green;cursor: pointer;font-weight: bold;font-size:18px !important; "></i>
+        <i class="fa fa-bell-o fa-lg" *ngIf="match.bell" (click)="selectBell(match)"
+           style="color:red;font-weight: bold;font-size:18px !important;cursor: pointer;"></i>
+
+      </td>
+      <td *ngIf="isVisible('misc','delete')"
+          [ngClass]="isLight() ? 'center-aligned' : 'center-align-dark dark-background'">
+        <i class="fa fa-times-circle fa-lg" (click)="removeMatch(match.matchId)"
+           style="color:rgb(192, 24, 24);cursor: pointer;font-size:18px;"></i>
+      </td>
+    </tr>
+    <tr *ngIf="!sortedData.length">
+      <td colspan="23">
+        <div class="row">
+          <div class="col-md-12" style="text-align: center;font-size: 14px !important;">
+            No Records to show!
+          </div>
+        </div>
+
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<ng-template #settings let-modalSettings>
+  <app-settings-popup
+    [modal]="modalSettings"
+    [color]="color"
+    [gridNumber]="gridNumber"
+    [activeMainColumnVisibility]="activeMainColumnVisibility"
+    [activePreviousStatsColumnVisibility]="activePreviousStatsColumnVisibility"
+    [activeMiscStatsColumnVisibility]="activeMiscStatsColumnVisibility">
+  </app-settings-popup>
+</ng-template>
+
+<ng-template #quickFilters let-modalQuick>
+  <app-quick-filter-popup
+    [modal]="modalQuick"
+    [gridNumber]="gridNumber"
+    [gamesCurrentlyInFilters]="gamesCurrentlyInFilters"
+    [miscFilters]="miscFilters">
+  </app-quick-filter-popup>
+</ng-template>
+
+<ng-template #strategyPopup let-modalQuick>
+  <app-strategy-popup
+    [modal]="modalQuick"
+    [gridNumber]="gridNumber"
+    [gamesCurrentlyInFilters]="gamesCurrentlyInFilters"
+    [miscFilters]="miscFilters">
+  </app-strategy-popup>
+</ng-template>
+
+<ng-template #statsFilters let-modalStats>
+  <app-stats-filter-popup
+    [modal]="modalStats"
+    [scoreFilters]="scoreFilters"
+    [gridNumber]="gridNumber"
+    [filters]="activeFilters">
+  </app-stats-filter-popup>
+</ng-template>
+
+<!--app-stats-filter-popup-->
+

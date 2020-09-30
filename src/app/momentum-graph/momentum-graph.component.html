@@ -1,0 +1,12 @@
+
+<div style="display: block;width:100px !important;">
+    <canvas baseChart style="height:65px !important;width:inherit !important;" [ngClass]="isLight() ? 'light-chart':'dark-chart'"
+      [datasets]="barChartData"
+      [labels]="barChartLabels"
+      [options]="barChartOptions"
+      [plugins]="barChartPlugins"
+      [legend]="barChartLegend"
+      [chartType]="barChartType">
+    </canvas>
+  </div> 
+  

@@ -1,0 +1,105 @@
+<div *ngIf="loaded">
+  <div class="row top left right">
+    <div class="col-md-3 page"
+         [ngStyle]="{color: !isLight() ? 'rgb(255, 208, 0)' : 'green'}">Home
+    </div>
+    <div class="col-md-5"></div>
+    <div class="col-md-4 ">
+      <img *ngIf="isLight()" (click)="addNewGrid()" src="./../../assets/add-grid.png" class="pull-right"
+           style="min-width:42px;max-width:48px;cursor: pointer;">
+      <img *ngIf="!isLight()" (click)="addNewGrid()" src="./../../assets/add-grid-dark.png" class="pull-right"
+           style="min-width:42px;max-width:48px;cursor: pointer;">
+    </div>
+    <div class="col-md-3 top-minus-10"
+         [ngStyle]="{color: !isLight() ? 'rgb(255, 208, 0)' : 'green'}">{{currentDate| date:'fullDate'}}</div>
+    <div class="col-md-9 top-minus-10"></div>
+  </div>
+  <button (click)="showPredictionTable()" class="btn btn-grey btn-circle right-10 bottom-5">Pre-Match</button>
+  <div *ngIf="preMatchFlag" [@enterAnimation] class="row py-5 left-5 right-5 ng-star-inserted table-margin">
+    <table class="mat-sort table table-hover responsive nowrap ng-star-inserted">
+      <thead class="prediction-thead">
+      <tr style="color:#fff;" class="tr-br">
+        <th class="th-pl t-head">KO</th>
+        <th class="t-head">League</th>
+        <th class="t-head">Home</th>
+        <th class="t-head">Away</th>
+        <th class="t-head">Predictions</th>
+        <th class="th-pr t-head">Notes</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let userPrediction of userPredictions;let i = index;">
+        <td class="td-ko">{{userPrediction.kickOffTime | date:"HH:mm"}}</td>
+        <td>{{userPrediction.league}}</td>
+        <td>{{userPrediction.homeName}}</td>
+        <td>{{userPrediction.awayName}}</td>
+        <td [ngClass]="center-aligned">
+                <span style="cursor: pointer;" [ngbPopover]="popContent1" placement="bottom"
+                      triggers="mouseenter:mouseleave">
+                  <svg-icon src="assets/predictions.svg" [svgStyle]="{ 'width.px':'90' }"></svg-icon>
+                </span>
+          <ng-template #popContent1>
+            <table class="mat-sort table-hover responsive nowrap ng-star-inserted">
+              <thead class="prediction-thead">
+              <tr style="color:#fff;">
+                <th>Market</th>
+                <th>Outcome</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let prediction of userPrediction.predictions">
+                <td>
+                  <div *ngIf="prediction">{{prediction.market}}</div>
+                </td>
+                <td>
+                  <div *ngIf="prediction">{{prediction.outcome}}</div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </ng-template>
+        </td>
+        <td [ngClass]="center-aligned">
+          <div style="cursor:pointer; width:90px;text-align: center;" [ngbPopover]="popContent2" placement="bottom"
+               triggers="mouseenter:mouseleave">
+            <i class="fa fa-sticky-note-o fa-lg ng-star-inserted"
+               style="color: green; cursor: pointer; font-weight: bold; font-size: 20px !important;"></i>
+          </div>
+          <ng-template #popContent2>
+            {{userPrediction.noteBody}}
+          </ng-template>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="row py-5 left right" *ngFor="let grid of grids;let i = index;">
+    <div class="col-md-12">
+      <app-score-grid [grid]="grid" [gridName]="grid.name" [gridNumber]="i"></app-score-grid>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!loaded" style="margin-top:22%;margin-left:42%">
+  <div class="spinner-grow text-primary" role="status">
+    <span class="sr-only">Loading </span>
+  </div>
+  <div class="spinner-grow text-secondary" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+  <div class="spinner-grow text-success" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+  <div class="spinner-grow text-danger" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+  <div class="spinner-grow text-warning" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+  <div class="spinner-grow text-info" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+  <div class="spinner-grow text-dark" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>

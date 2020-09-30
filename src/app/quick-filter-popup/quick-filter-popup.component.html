@@ -1,0 +1,80 @@
+<img src="./../../assets/close.png" class="pull-right"
+     style="width:30px; margin-top:-15px !important;cursor: pointer; margin-right:-15px !important;font-weight: bold !important;;"
+     (click)="modal.dismiss('Cross click')">
+<div class="modal-header">
+  <div class="row">
+    <div class="col-md-12" style="font-size: 20px !important;font-weight: bold;">
+      Quick Filters:
+    </div>
+  </div>
+</div>
+<div class="modal-body" style="color:grey !important">
+
+  <div class="row">
+    <div class="col-md-12 top-10 bottom-10"
+         style="border-bottom: solid 1px #598378 !important;font-size:17px !important;font-weight: bold;">Show Only
+      Games Currently In
+      <div class="row top-10 bottom-10" *ngIf="gamesCurrentlyInFilters && gamesCurrentlyInFilters.length">
+        <div class="col-md-3" *ngFor="let entry of getGamesCurrentlyInFilters()">
+          <button type="button" *ngIf="entry" (click)="toggle(entry)" style="font-size: 16px !important;"
+                  [ngClass]="getClass(entry?.applyFilter)">
+            {{entry?.value}}
+            <i class="fa fa-check-circle-o right-10" *ngIf="entry?.applyFilter"
+               style="font-size:20px !important;color: rgb(255, 208, 0);float: right;margin:0 !important;bottom:5px !important"></i>
+            <i class="fa fa-times-circle-o right-10" *ngIf="!entry?.applyFilter"
+               style="font-size:20px !important;color:#07241d;float: right;margin:0 !important;bottom:5px !important"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 top-10 bottom-10"
+         style="border-bottom: solid 1px #598378 !important;font-size:17px !important;font-weight: bold;">Misc
+      <div class="row top-10 bottom-10" *ngIf="miscFilters && miscFilters.length">
+        <div class="col-md-3" *ngFor="let entry of getMiscFilters()">
+          <button type="button" *ngIf="entry" (click)="toggle(entry)" style="font-size: 16px !important;"
+                  [ngClass]="getClass(entry?.applyFilter)">
+            {{entry?.value}}
+            <i class="fa fa-check-circle-o right-10" *ngIf="entry?.applyFilter"
+               style="font-size:20px !important;color: rgb(255, 208, 0);float: right;margin:0 !important;bottom:5px !important"></i>
+            <i class="fa fa-times-circle-o right-10" *ngIf="!entry?.applyFilter"
+               style="font-size:20px !important;color:#07241d;float: right;margin:0 !important;bottom:5px !important"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 top-10 bottom-10" style="font-size:17px !important;font-weight:bold;">
+      Strategies
+    </div>
+    <div class="col-md-3">
+
+      <div ngbDropdown style="width:100%">
+        <div class="btn-group" style="width:100%">
+
+          <button
+            [ngClass]="isLight() ? 'btn btn-soccer-outline-primary-left' : 'btn btn-soccer-dark-outline-primary-left'"
+            style="font-size: 16px !important;" id="dropdownBasic2" ngbDropdownToggle>
+                    <span style="margin-right:40px;font-size: 16px !important;">
+                        Strategy Name
+                    </span></button>
+          <button ngbDropdownToggle id="dropdownBasic2" type="button"
+                  style="font-size: 17px !important;width:40px !important;"
+                  [ngClass]="isLight() ? 'btn btn-pair btn-soccer-primary-2-right': 'btn btn-pair btn-soccer-dark-primary-right'">
+            <i class="fa fa-caret-down fa-lg" style="color: rgb(255, 208, 0)"></i>
+          </button>
+        </div>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic2" style="width:calc(100% - 40px) !important;"
+             [ngClass]="isLight()? 'dropdown-body':'dropdown-body-dark'">
+          <button ngbDropdownItem *ngFor="let stat of strategies">
+            {{stat}}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9 bottom-10">
+    </div>
+  </div>
+</div>

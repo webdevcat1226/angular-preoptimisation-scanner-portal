@@ -1,0 +1,7 @@
+{
+    "/api/*": {
+      "target": "https://scannerapi.azurewebsites.net",
+      "secure": false,
+      "changeOrigin": true
+    }
+  }

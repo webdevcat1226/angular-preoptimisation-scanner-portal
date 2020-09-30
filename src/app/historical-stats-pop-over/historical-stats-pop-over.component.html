@@ -1,0 +1,53 @@
+<div style="height:200px !important;width:500px !important;" >
+<div class="row" style="border-bottom: solid 1px #146853 !important;">
+    <div class="col-md-4">
+        <span class="top-5 bottom-5" style="color:grey">Pre-Match Info</span>
+    </div>
+    <div class="col-md-8" >
+        <button type="button"  style="cursor: default;" 
+        [ngClass]="isLight() ? 'btn btn-soccer-primary btn-lg pull-right bottom-5 rounded-style': 'btn btn-soccer-dark btn-lg pull-right bottom-5 rounded-style'">
+            <i class="fa fa-futbol-o fa-lg right-5" style="color:#fff;cursor: default;"></i>
+            {{league}}</button>
+    </div>
+</div>
+<div class="row" >
+    <div class="col-md-12" style="color:grey;height:32px;">
+        <div class="top-10 left-10" >Odds</div>
+    </div>
+</div>
+<div class="row" >
+    <div class="col-md-12" [ngClass]="isLight() ? 'light-mode-border':'dark-mode-border'">
+        <button type="button" style="cursor: default;"
+        [ngClass]="isLight() ? 'btn btn-soccer-primary btn-lg top-5 bottom-10 right-10 rounded-style' : 'btn btn-soccer-dark btn-lg top-5 bottom-10 right-10 rounded-style'">
+            <i class="fa fa-futbol-o fa-lg right-10" *ngIf="preMatchOdds" style="color:#fff"></i>
+            Home {{preMatchOdds.homeOdds | number:'1.0-1'}}</button>
+
+            <button type="button" style="cursor: default;" class="btn btn-soccer-secondary btn-lg top-5 bottom-10 right-10 rounded-style">
+                <i class="fa fa-futbol-o fa-lg right-5" style="color:#fff"></i>
+                Draw {{preMatchOdds.drawOdds | number:'1.0-1'}}</button>
+
+                <button type="button" style="cursor: default;" class="btn btn-soccer-yellow btn-lg top-5 bottom-10 rounded-style">
+                    <i class="fa fa-futbol-o fa-lg right-5" style="color:#fff"></i>
+                    Away {{preMatchOdds.awayOdds | number:'1.0-1'}}</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12" style="color:grey;height:32px;">
+        <div class="top-10 left-10" >Home Form</div>
+    </div>
+    <div class="col-md-8" style="color:grey;height:32px;">
+        <button type="button" *ngFor="let option of dataOptions"  style="cursor: default;"  [ngClass]="getClass(option)">
+            <span *ngIf="option && option.matchResult==1">D</span>
+            <span *ngIf="option && option.matchResult==0">L</span>
+            <span *ngIf="option && option.matchResult==2">W</span>
+        </button> 
+    </div>
+    <div class="col-md-4">
+        <button type="button" style="color: rgb(255, 208, 0);cursor: pointer; width: 100% !important;" (click)="viewInfo()" 
+        [ngClass]="isLight() ? 'btn btn-soccer-primary bottom-5 right-10 rounded-style' : 'btn btn-soccer-dark bottom-5 right-10 rounded-style'">
+            <i class="fa fa-eye fa-lg right-10" *ngIf="preMatchOdds"></i>
+            View Info</button>
+    </div>
+</div>
+</div>
+
